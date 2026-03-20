@@ -1,9 +1,14 @@
 import sqlite3
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, session, url_for
 
 app = Flask(__name__)
 
-# Función para crear la base de datos si no existe
+# Una clave secreta aleatoria para que nadie hackee las sesiones
+app.secret_key = 'mi-primo-es-el-mejor-barbero-de-granada-2026' 
+
+# LA CONTRASEÑA QUE TÚ ELIJAS
+ADMIN_PASSWORD = "gabirechulon" 
+
 def init_db():
     conn = sqlite3.connect('citas.db')
     cursor = conn.cursor()
@@ -20,46 +25,59 @@ def init_db():
 @app.route('/')
 def index():
     return render_template('index.html')
+
 @app.route('/reservar', methods=['POST'])
 def reservar():
     nombre = request.form.get('nombre')
     fecha = request.form.get('fecha')
-    telefono_primo = "34600000000" # <-- Pon aquí el número de tu primo (con el 34 delante)
-
-    # 1. Guardar en BD (esto ya lo tienes)
+    
     conn = sqlite3.connect('citas.db')
     cursor = conn.cursor()
     cursor.execute('INSERT INTO reservas (nombre, fecha) VALUES (?, ?)', (nombre, fecha))
     conn.commit()
     conn.close()
+    
+    # Aquí puedes poner el link de WhatsApp que hablamos antes
+    return f"<h1>¡Cita guardada!</h1><p>Gracias {nombre}. <a href='/'>Volver</a></p>"
 
-    # 2. Crear el link de WhatsApp
-    mensaje = f"Hola! Soy {nombre}, acabo de reservar una cita para el {fecha}. ¿Me confirmas?"
-    # Reemplazamos espacios por %20 para que el link funcione
-    link_whatsapp = f"https://wa.me/{telefono_primo}?text={mensaje.replace(' ', '%20')}"
+# --- SECCIÓN DE ADMINISTRACIÓN CON CONTRASEÑA ---
 
-    # 3. Mostrar confirmación con el botón
-    return f"""
-        <h1>¡Cita registrada!</h1>
-        <p>Para asegurar tu hueco, pulsa el botón de abajo:</p>
-        <a href="{link_whatsapp}" style="background-color: #25D366; color: white; padding: 15px; text-decoration: none; border-radius: 5px; display: inline-block;">
-            Confirmar por WhatsApp
-        </a>
-    """
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        password_ingresada = request.form.get('password')
+        if password_ingresada == ADMIN_PASSWORD:
+            session['admin_logueado'] = True
+            return redirect(url_for('admin'))
+        else:
+            return "Contraseña incorrecta. <a href='/login'>Intentar de nuevo</a>"
+    
+    return '''
+        <form method="post">
+            <h2>Acceso para el Jefe</h2>
+            <input type="password" name="password" placeholder="Introduce la clave">
+            <button type="submit">Entrar</button>
+        </form>
+    '''
 
 @app.route('/admin')
 def admin():
+    # Verificamos si tiene la "pulsera" de entrada
+    if not session.get('admin_logueado'):
+        return redirect(url_for('login'))
+    
     conn = sqlite3.connect('citas.db')
     cursor = conn.cursor()
-    # Traemos todas las reservas de la base de datos
     cursor.execute('SELECT * FROM reservas ORDER BY fecha DESC')
     todas_las_citas = cursor.fetchall()
     conn.close()
-    
-    # Se las pasamos a una nueva página HTML
     return render_template('admin.html', citas=todas_las_citas)
 
+@app.route('/logout')
+def logout():
+    session.pop('admin_logueado', None)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    init_db() # Creamos la tabla al arrancar
+    init_db()
     app.run(debug=True)
