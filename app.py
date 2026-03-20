@@ -25,23 +25,27 @@ def init_db():
 @app.route('/')
 def index():
     return render_template('index.html')
-
 @app.route('/reservar', methods=['POST'])
 def reservar():
     nombre = request.form.get('nombre')
     fecha = request.form.get('fecha')
     
+    # 1. Guardar en BD
     conn = sqlite3.connect('citas.db')
     cursor = conn.cursor()
     cursor.execute('INSERT INTO reservas (nombre, fecha) VALUES (?, ?)', (nombre, fecha))
     conn.commit()
     conn.close()
-    
-    # Aquí puedes poner el link de WhatsApp que hablamos antes
-    return f"<h1>¡Cita guardada!</h1><p>Gracias {nombre}. <a href='/'>Volver</a></p>"
 
+    # 2. Configurar WhatsApp (Pon el número de tu primo aquí sin el +)
+    telefono_primo = "34600000000" 
+    mensaje = f"Hola! Soy {nombre}, acabo de reservar una cita para el {fecha} a través de la web. ¿Me confirmas?"
+    # Creamos el link (reemplazando espacios para que no de error)
+    link_ws = f"https://wa.me/{telefono_primo}?text={mensaje.replace(' ', '%20')}"
+
+    # 3. Mostrar la nueva página bonita
+    return render_template('confirmacion.html', nombre=nombre, fecha=fecha, link_ws=link_ws)
 # --- SECCIÓN DE ADMINISTRACIÓN CON CONTRASEÑA ---
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -50,15 +54,10 @@ def login():
             session['admin_logueado'] = True
             return redirect(url_for('admin'))
         else:
-            return "Contraseña incorrecta. <a href='/login'>Intentar de nuevo</a>"
+            return "<h1>Error</h1><p>Contraseña incorrecta.</p><a href='/login'>Volver</a>"
     
-    return '''
-        <form method="post">
-            <h2>Acceso para el Jefe</h2>
-            <input type="password" name="password" placeholder="Introduce la clave">
-            <button type="submit">Entrar</button>
-        </form>
-    '''
+    # Cambiamos el texto feo por el nuevo HTML
+    return render_template('login.html')
 
 @app.route('/admin')
 def admin():

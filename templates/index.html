@@ -5,46 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peluquería Alto Voltaje | Citas Online</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --dorado: #d4af37;
+            --oscuro-puro: #0f0f0f;
+            --oscuro-card: #1a1a1a;
+            --blanco-suave: #f0f0f0;
+        }
 
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Barbería Premium</a>
+        body {
+            background-color: var(--oscuro-puro);
+            color: var(--blanco-suave);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .navbar {
+            background-color: black !important;
+            border-bottom: 2px solid var(--dorado);
+            padding: 1.2rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: var(--dorado) !important;
+            text-transform: uppercase;
+        }
+
+        h1 { color: var(--dorado); font-weight: 800; text-transform: uppercase; }
+        h3 { color: var(--dorado); font-weight: 600; }
+
+        .card-reserva {
+            background-color: var(--oscuro-card);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        .form-control {
+            background-color: #252525;
+            border: 1px solid #444;
+            color: white;
+            padding: 12px;
+        }
+
+        .form-control:focus {
+            background-color: #2d2d2d;
+            color: white;
+            border-color: var(--dorado);
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.15);
+        }
+
+        .btn-reserva {
+            background-color: var(--dorado);
+            border: none;
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-reserva:hover {
+            background-color: #f1c40f;
+            transform: scale(1.02);
+            color: black;
+        }
+
+        .img-pelu {
+            border: 3px solid #222;
+            border-radius: 20px;
+            filter: grayscale(20%);
+        }
+
+        footer {
+            background-color: #000;
+            border-top: 1px solid #222;
+            padding: 4rem 0 2rem;
+        }
+
+        .social-link {
+            color: var(--blanco-suave);
+            font-size: 1.8rem;
+            transition: color 0.3s;
+            margin: 0 15px;
+        }
+
+        .social-link:hover {
+            color: var(--dorado);
+        }
+
+        .text-dorado { color: var(--dorado); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark">
+        <div class="container text-center">
+            <a class="navbar-brand w-100" href="#"><i class="bi bi-scissors me-2"></i>ALTO VOLTAJE</a>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6">
-                <h1>Bienvenido</h1>
-                <p>Cortes modernos, barbas clásicas y el mejor ambiente.</p>
-                <img src="https://via.placeholder.com/400x250" class="img-fluid rounded" alt="Peluquería">
+    <div class="container mt-5 pt-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <span class="badge bg-dark text-warning mb-3 px-3 py-2 border border-warning">BARBERÍA PROFESIONAL</span>
+                <h1 class="display-3">Corte con <br><span class="text-white">Personalidad</span></h1>
+                <p class="lead text-white-50 mt-3 mb-4">No es solo un corte, es tu imagen. En Alto Voltaje fusionamos lo clásico con lo moderno para que salgas con la energía al máximo.</p>
+                
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-dark p-3 rounded-circle border border-secondary me-3">
+                        <i class="bi bi-geo-alt text-dorado fs-4"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 fw-bold">Ubicación</p>
+                        <p class="text-white-50 mb-0">Calle Real, 123 - Granada</p>
+                    </div>
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                     class="img-fluid img-pelu shadow-lg" alt="Peluquería">
             </div>
 
-            <div class="col-md-6 bg-white p-4 shadow-sm rounded">
-                <h3>Reserva tu cita</h3>
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label">Tu Nombre</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Ej: Juan Pérez">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Fecha y Hora</label>
-                        <input type="datetime-local" class="form-control" id="fecha">
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Confirmar Reserva</button>
-                </form>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="card-reserva">
+                    <h3 class="text-center mb-4">RESERVA TU HUECO</h3>
+                    
+                    <form action="/reservar" method="POST">
+                        <div class="mb-4">
+                            <label class="form-label small text-uppercase fw-bold text-white-50">Tu Nombre Completo</label>
+                            <input type="text" name="nombre" class="form-control" placeholder="Ej: Gabriel García" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label small text-uppercase fw-bold text-white-50">Día y Hora</label>
+                            <input type="datetime-local" name="fecha" class="form-control" required>
+                        </div>
+
+                        <div class="alert alert-warning bg-dark border-warning text-warning small text-center mb-4">
+                            <i class="bi bi-whatsapp me-2"></i> Tras reservar, confirma tu cita por WhatsApp.
+                        </div>
+
+                        <button type="submit" class="btn btn-reserva w-100">
+                            Confirmar Reserva <i class="bi bi-arrow-right-short ms-2"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-<footer class="mt-5 py-4 bg-dark text-white-50 text-center">
-    <div class="container">
-        <p class="mb-1">&copy; 2026 Peluquería Premium</p>
-        <a href="/admin" class="text-warning text-decoration-none small">
-            <i class="bi bi-lock"></i> Acceso Administración
-        </a>
-    </div>
-</footer>
+
+    <footer class="mt-5 text-center">
+        <div class="container">
+            <h4 class="text-dorado mb-4">SÍGUENOS</h4>
+            <div class="d-flex justify-content-center mb-5">
+                <a href="https://www.instagram.com/gabi_porras/" target="_blank" class="social-link">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="https://wa.me/34690005656" target="_blank" class="social-link">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+            </div>
+            
+            <p class="text-white-50 mb-1">&copy; 2026 Peluquería Alto Voltaje - Granada</p>
+            <p class="small text-white-50 mb-4">Diseñado con ❤️ para el barbero número 1.</p>
+            
+            <hr class="w-25 mx-auto border-secondary mb-4">
+            
+            <a href="/admin" class="text-decoration-none" style="color: #222; font-size: 0.75rem;">
+                <i class="bi bi-shield-lock"></i> Acceso Personal
+            </a>
+        </div>
+    </footer>
+
 </body>
 </html>
