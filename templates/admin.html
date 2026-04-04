@@ -2,29 +2,63 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Control - Peluquería</title>
+    <title>Panel de Control | Alto Voltaje</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #1a1a1a; color: white; padding: 40px; font-family: 'Inter', sans-serif; }
+        .table { background-color: #252525; color: white; border-radius: 15px; overflow: hidden; border: none; }
+        .table thead { background-color: #ffea00; color: black; }
+        h1 { font-weight: 900; color: #ffea00; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-logout { background-color: #dc3545; color: white; border: none; font-weight: bold; }
+        .badge { font-size: 0.9rem; padding: 8px 12px; }
+    </style>
 </head>
-<body class="p-5">
-    <h1>Listado de Citas</h1>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Fecha y Hora</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for cita in citas %}
-            <tr>
-                <td>{{ cita[0] }}</td>
-                <td>{{ cita[1] }}</td>
-                <td>{{ cita[2] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="/" class="btn btn-secondary">Volver al Inicio</a>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h1>Citas Recibidas ⚡</h1>
+            <a href="/logout" class="btn btn-logout shadow-sm px-4">
+                <i class="bi bi-box-arrow-right"></i> Salir
+            </a>
+        </div>
+
+        <div class="table-responsive shadow-lg">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="py-3 ps-4">Cliente</th>
+                        <th class="py-3">Fecha y Hora</th>
+                        <th class="py-3">Servicio</th>
+                        <th class="py-3 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cita in citas %}
+                    <tr>
+                        <td class="fw-bold text-warning ps-4">{{ cita[1] }}</td>
+                        <td>{{ cita[2] }}</td>
+                        <td><span class="badge bg-secondary opacity-75">{{ cita[3] }}</span></td>
+                        <td class="text-center">
+                            <a href="/editar/{{ cita[0] }}" class="btn btn-sm btn-outline-warning me-2 px-3">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <a href="/borrar/{{ cita[0] }}" class="btn btn-sm btn-outline-danger px-3" 
+                               onclick="return confirm('¿Seguro que quieres borrar la cita de {{ cita[1] }}?')">
+                                <i class="bi bi-trash"></i> Borrar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-5">
+            <a href="/" class="text-secondary text-decoration-none small">
+                <i class="bi bi-arrow-left"></i> Volver a la web pública
+            </a>
+        </div>
+    </div>
 </body>
 </html>

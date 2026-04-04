@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar Cita | Alto Voltaje</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a1a; color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; }
+        .edit-card { background: #252525; border: 2px solid #ffea00; padding: 30px; border-radius: 24px; width: 100%; max-width: 450px; shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-label { color: #888; font-size: 0.8rem; margin-bottom: 5px; margin-top: 10px; }
+        .form-control, .form-select { background: #333; border: 1px solid #444; color: white; border-radius: 10px; padding: 12px; }
+        .form-control:focus, .form-select:focus { background: #444; border-color: #ffea00; color: white; box-shadow: none; }
+        .btn-save { background: #ffea00; color: black; font-weight: 900; width: 100%; border-radius: 12px; padding: 15px; margin-top: 20px; border: none; }
+        .btn-save:hover { background: #e6d200; }
+    </style>
+</head>
+<body>
+    <div class="edit-card">
+        <h3 class="text-center mb-4" style="color: #ffea00; font-weight: 900;">EDITAR CITA ⚡</h3>
+        <form method="POST">
+            <label class="form-label">CLIENTE (NOMBRE O IG)</label>
+            <input type="text" name="nombre" value="{{ cita[1] }}" class="form-control" required>
+            
+            <label class="form-label">FECHA Y HORA</label>
+            <input type="datetime-local" name="fecha" value="{{ cita[2] }}" class="form-control" required>
+            
+            <label class="form-label">SERVICIO SELECCIONADO</label>
+            <select name="servicio" class="form-select" required>
+                <option value="Corte de cabello" {% if cita[3] == 'Corte de cabello' %}selected{% endif %}>Corte de cabello (11€)</option>
+                <option value="Barba" {% if cita[3] == 'Barba' %}selected{% endif %}>Barba (8€)</option>
+                <option value="Corte y Barba" {% if cita[3] == 'Corte y Barba' %}selected{% endif %}>Corte y Barba (14€)</option>
+                <option value="Afeitado de cabeza" {% if cita[3] == 'Afeitado de cabeza' %}selected{% endif %}>Afeitado de cabeza (10€)</option>
+                <option value="Corte + Mechon color" {% if cita[3] == 'Corte + Mechon color' %}selected{% endif %}>Corte + Mechón color (30€)</option>
+                <option value="Tinte completo + Corte" {% if cita[3] == 'Tinte completo + Corte' %}selected{% endif %}>Tinte completo + Corte (45€)</option>
+                <option value="Corte + Mechas" {% if cita[3] == 'Corte + Mechas' %}selected{% endif %}>Corte + Mechas (35€)</option>
+            </select>
+            
+            <button type="submit" class="btn btn-save">GUARDAR CAMBIOS ⚡</button>
+            <div class="text-center mt-3">
+                <a href="/admin" style="color: #666; text-decoration: none; font-size: 0.9rem;">Volver al panel sin cambios</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
